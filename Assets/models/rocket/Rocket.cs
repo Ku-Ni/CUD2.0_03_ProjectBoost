@@ -7,6 +7,7 @@ using UnityEngine;
 public class Rocket : MonoBehaviour {
 
     private Rigidbody rigidBody;
+    private AudioSource thrustSound;
 
     private readonly KeyCode thrust = KeyCode.Space;
     private readonly KeyCode left = KeyCode.LeftArrow;
@@ -15,22 +16,32 @@ public class Rocket : MonoBehaviour {
     // Use this for initialization
     void Start() {
         rigidBody = GetComponent<Rigidbody>();
+        rigidBody.freezeRotation = true;
+        thrustSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update() {
-        HandleMovement();
+        ProcessThrust();
+        ProcessRotate();
     }
 
-
-    private void HandleMovement() {
-
-
+    private void ProcessThrust() {
         if (Input.GetKey(thrust)) {
             rigidBody.AddRelativeForce(Vector3.up);
-        }
 
+            if (thrustSound.isPlaying == false) {
+                thrustSound.Play();
+            }
+        }
+        else {
+            thrustSound.Stop();
+        }
+    }
+
+    private void ProcessRotate() {
         if (Input.GetKey(left) ^ Input.GetKey(right)) {
+            
             if (Input.GetKey(right)) {
                 Debug.Log("Rotate right");
                 transform.Rotate(Vector3.forward);
@@ -39,7 +50,7 @@ public class Rocket : MonoBehaviour {
                 Debug.Log("Rotate left");
                 transform.Rotate(Vector3.back);
             }
+            
         }
-
     }
 }
