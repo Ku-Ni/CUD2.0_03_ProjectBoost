@@ -10,9 +10,16 @@ public class Rocket : MonoBehaviour {
     private float thrustSpeed = 1000f;
     [SerializeField]
     private float rotationSpeed = 100f;
+    [SerializeField]
+    private AudioClip thrustAudio;
+    [SerializeField]
+    private AudioClip explosionAudio;
 
+    private bool isActive = true;
     private Rigidbody rigidBody;
-    private AudioSource thrustSound;
+    private GameManager gameManager;
+    private AudioSource audioSource;
+
 
     private readonly KeyCode thrust = KeyCode.Space;
     private readonly KeyCode left = KeyCode.LeftArrow;
@@ -20,27 +27,39 @@ public class Rocket : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        Initialize();
+
+    }
+
+    private void Initialize() {
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.freezeRotation = true;
-        thrustSound = GetComponent<AudioSource>();
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        audioSource = GetComponent<AudioSource>();
+
+        if (!gameManager)
+            throw new UnityException("GameManager not found!");
+        if (!audioSource)
+            throw new UnityException("AudioSource not found!");
     }
 
     // Update is called once per frame
     void Update() {
-        ProcessThrust();
-        ProcessRotate();
+        if (isActive) {
+            ProcessThrust();
+            ProcessRotate();
+        }
     }
 
     private void ProcessThrust() {
         if (Input.GetKey(thrust)) {
             rigidBody.AddRelativeForce(Vector3.up * (thrustSpeed * Time.deltaTime));
-
-            if (thrustSound.isPlaying == false) {
-                thrustSound.Play();
+            if (audioSource.isPlaying == false) {
+                audioSource.PlayOneShot(thrustAudio);
             }
         }
         else {
-            thrustSound.Stop();
+            audioSource.Stop();
         }
     }
 
@@ -48,11 +67,9 @@ public class Rocket : MonoBehaviour {
         if (Input.GetKey(left) ^ Input.GetKey(right)) {
 
             if (Input.GetKey(right)) {
-                Debug.Log("Rotate right");
                 transform.Rotate(Vector3.forward * (rotationSpeed * Time.deltaTime));
             }
             else if (Input.GetKey(left)) {
-                Debug.Log("Rotate left");
                 transform.Rotate(Vector3.back * (rotationSpeed * Time.deltaTime));
             }
 
@@ -60,20 +77,38 @@ public class Rocket : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision collision) {
+        if (!isActive) {return;}
+
         Tags collisionTag = (Tags) Enum.Parse(typeof(Tags), collision.gameObject.tag.ToUpper());
 
         switch (collisionTag) {
-            // TODO complete
             case Tags.FINISH:
-                Debug.Log("Level completed!");
+                CompleteLevel();
                 break;
             case Tags.FRIENDLY:
-                Debug.Log("Friendly item, Do nothing");
+                // Friendly item, Do nothing
+                break;
+            case Tags.UNTAGGED:
+                Crash();
                 break;
             default:
-                Debug.Log("You crashed!" + "\n" +
-                    "Blood...blood...blood...and death.");
-                break;
+                throw new UnityException("Tag "+ collisionTag+" not handled in collision code");
         }
     }
+
+    private void CompleteLevel() {
+        Debug.Log("Level completed!");
+        isActive = false;
+        gameManager.CompleteCurrentLevel();
+    }
+
+    private void Crash() {
+        Debug.Log("Blood...blood...blood...and death." + "\n" + "You crashed! Are you alive? No, no you are not");
+        isActive = false;
+        rigidBody.freezeRotation = false;
+        audioSource.Stop();
+        audioSource.PlayOneShot(explosionAudio);
+        gameManager.Invoke("Crash", (explosionAudio.length-1f));
+    }
+    
 }
