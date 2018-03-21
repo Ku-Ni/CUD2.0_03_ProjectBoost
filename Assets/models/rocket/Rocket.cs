@@ -14,6 +14,13 @@ public class Rocket : MonoBehaviour {
     private AudioClip thrustAudio;
     [SerializeField]
     private AudioClip explosionAudio;
+    [SerializeField]
+    private ParticleSystem thrustParticle;
+    [SerializeField]
+    private ParticleSystem crashParticle;
+    [SerializeField]
+    private ParticleSystem successParticle;
+
 
     private bool isActive = true;
     private Rigidbody rigidBody;
@@ -56,10 +63,12 @@ public class Rocket : MonoBehaviour {
             rigidBody.AddRelativeForce(Vector3.up * (thrustSpeed * Time.deltaTime));
             if (audioSource.isPlaying == false) {
                 audioSource.PlayOneShot(thrustAudio);
+                thrustParticle.Play();
             }
         }
         else {
             audioSource.Stop();
+            thrustParticle.Stop();
         }
     }
 
@@ -99,6 +108,7 @@ public class Rocket : MonoBehaviour {
     private void CompleteLevel() {
         Debug.Log("Level completed!");
         isActive = false;
+        successParticle.Play();
         gameManager.CompleteCurrentLevel();
     }
 
@@ -107,7 +117,9 @@ public class Rocket : MonoBehaviour {
         isActive = false;
         rigidBody.freezeRotation = false;
         audioSource.Stop();
+        thrustParticle.Stop();
         audioSource.PlayOneShot(explosionAudio);
+        crashParticle.Play();
         gameManager.Invoke("Crash", (explosionAudio.length-1f));
     }
     
