@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2059d4a4b6883f748a15336dc716998f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thrustSpeed: 1000
+  thrustSpeed: 2500
   rotationSpeed: 250
   thrustAudio: {fileID: 8300000, guid: 6b618756488934743bc042ab30040049, type: 3}
   explosionAudio: {fileID: 8300000, guid: 03c23cbcd2fe10c4189be858014f1ad4, type: 3}
