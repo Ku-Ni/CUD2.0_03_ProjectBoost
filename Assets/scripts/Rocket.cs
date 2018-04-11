@@ -88,16 +88,16 @@ public class Rocket : MonoBehaviour {
     void OnCollisionEnter(Collision collision) {
         if (!isActive) {return;}
 
-        Tags collisionTag = (Tags) Enum.Parse(typeof(Tags), collision.gameObject.tag.ToUpper());
+        Tags collisionTag = (Tags) Enum.Parse(typeof(Tags), collision.gameObject.tag);
 
         switch (collisionTag) {
-            case Tags.FINISH:
+            case Tags.Finish:
                 CompleteLevel();
                 break;
-            case Tags.FRIENDLY:
+            case Tags.Friendly:
                 // Friendly item, Do nothing
                 break;
-            case Tags.UNTAGGED:
+            case Tags.Untagged:
                 Crash();
                 break;
             default:
@@ -121,6 +121,7 @@ public class Rocket : MonoBehaviour {
         audioSource.PlayOneShot(explosionAudio);
         crashParticle.Play();
         gameManager.Invoke("Crash", (explosionAudio.length-1f));
+        //gameObject.SetActive(false);
     }
     
 }

@@ -2,7 +2,8 @@
 using UnityEditor;
 
 public enum Tags {
-    FRIENDLY,
-    FINISH,
-    UNTAGGED    
+    Friendly,
+    Finish,
+    Untagged,
+    Player
 }

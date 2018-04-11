@@ -10,7 +10,22 @@ EditorBuildSettings:
     guid: 2da782ff1258f6c44b71a297ce0a9229
   - enabled: 1
     path: Assets/scenes/level 1.unity
-    guid: 380cf18f0fcb57843b6a96546b9a994c
+    guid: 6dc4695a61a0bca4a9cd73987ac4642f
   - enabled: 1
     path: Assets/scenes/level 2.unity
-    guid: 6dc4695a61a0bca4a9cd73987ac4642f
+    guid: 380cf18f0fcb57843b6a96546b9a994c
+  - enabled: 1
+    path: Assets/scenes/level 3.unity
+    guid: 1946e2c9295b43d4580be612e95cef5b
+  - enabled: 1
+    path: Assets/scenes/Robyn 1.unity
+    guid: cdfe45896d224394bababb7aea7b3f9b
+  - enabled: 1
+    path: Assets/scenes/Robyn 2.unity
+    guid: 2369c6c32d6368e4ba7c65a19371c309
+  - enabled: 1
+    path: Assets/scenes/Raven.unity
+    guid: eb4aa3d76d251f747ac8dbed9bcf6702
+  - enabled: 1
+    path: Assets/scenes/Robyn 3.unity
+    guid: 4c231976760d71a4c9d9c6597a1cc3f2

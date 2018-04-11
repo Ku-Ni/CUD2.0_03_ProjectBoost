@@ -43,8 +43,16 @@ public class GameManager : MonoBehaviour {
 
 
     public void Crash() {
-        // todo complete
-        SceneManager.LoadScene("Level 1");
+        currentLevel = 0;
+
+        GameObject player = GameObject.FindGameObjectWithTag(Tags.Player.ToString());
+        if (player == null) {
+            throw new UnityException("Could not load player object tagged with " + Tags.Player.ToString());
+        } else {
+            player.SetActive(false);
+        }
+                   
+        LoadNextLevel();
     }
 
 
